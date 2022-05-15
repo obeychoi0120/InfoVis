@@ -13,9 +13,9 @@
     <script src="components/scatterplot.js"></script>
     <script src="components/histogram.js"></script>
     <script src="components/datatable.js"></script>
+    <script type="text/javascript"></script>
 
-
-    <title>My Scatterplot</title>
+    <title>Pima Indian Diabetes Dataset</title>
     <style>
         body {
             background: #eee;
@@ -23,7 +23,7 @@
         }
 
         .container {
-            width: 800px;
+            width: 1280px;
             background: white;
         }
 
@@ -40,7 +40,7 @@
     <header>
         <nav class="container navbar navbar-light bg-light">
             <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1">My Scatterplot</span>
+                <span class="navbar-brand mb-0 h1">Pima Indian Diabetes Dataset</span>
             </div>
         </nav>
 
@@ -51,21 +51,37 @@
             <div class="col-1 text-end pe-2"><strong>X:</strong></div>
             <div class="col-11">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="x-encoding" value="sepal.length" id="x-sl"
+                    <input class="form-check-input" type="radio" name="x-encoding" value="Pregnancies" id="x-pr"
                         checked>
-                    <label class="form-check-label" for="x-sl">SepalLength</label>
+                    <label class="form-check-label" for="x-pr">Pregnancies</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="x-encoding" value="sepal.width" id="x-sw">
-                    <label class="form-check-label" for="x-sw">SepalWidth</label>
+                    <input class="form-check-input" type="radio" name="x-encoding" value="Glucose" id="x-gl">
+                    <label class="form-check-label" for="x-gl">Glucose</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="x-encoding" value="petal.length" id="x-pl">
-                    <label class="form-check-label" for="x-pl">PetalLength</label>
+                    <input class="form-check-input" type="radio" name="x-encoding" value="BloodPressure" id="x-bp">
+                    <label class="form-check-label" for="x-bp">BloodPressure</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="x-encoding" value="petal.width" id="x-pw">
-                    <label class="form-check-label" for="x-pw">PetalWidth</label>
+                    <input class="form-check-input" type="radio" name="x-encoding" value="SkinThickness" id="x-st">
+                    <label class="form-check-label" for="x-st">SkinThickness</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="x-encoding" value="Insulin" id="x-in">
+                    <label class="form-check-label" for="x-in">Insulin</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="x-encoding" value="BMI" id="x-bm">
+                    <label class="form-check-label" for="x-bm">BMI</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="x-encoding" value="DiabetesPedigreeFunction" id="x-dp">
+                    <label class="form-check-label" for="x-dp">DiabetesPedigreeFunction</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="x-encoding" value="Age" id="x-ag">
+                    <label class="form-check-label" for="x-ag">Age</label>
                 </div>
             </div>
         </div>
@@ -73,21 +89,37 @@
             <div class="col-1 text-end pe-2"><strong>Y:</strong></div>
             <div class="col-11">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="y-encoding" value="sepal.length" id="y-sl">
-                    <label class="form-check-label" for="y-sl">SepalLength</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="y-encoding" value="sepal.width" id="y-sw"
+                    <input class="form-check-input" type="radio" name="y-encoding" value="Pregnancies" id="y-pr"
                         checked>
-                    <label class="form-check-label" for="y-sw">SepalWidth</label>
+                    <label class="form-check-label" for="y-pr">Pregnancies</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="y-encoding" value="petal.length" id="y-pl">
-                    <label class="form-check-label" for="y-pl">PetalLength</label>
+                    <input class="form-check-input" type="radio" name="y-encoding" value="Glucose" id="y-gl">
+                    <label class="form-check-label" for="y-gl">Glucose</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="y-encoding" value="petal.width" id="y-pw">
-                    <label class="form-check-label" for="y-pw">PetalWidth</label>
+                    <input class="form-check-input" type="radio" name="y-encoding" value="BloodPressure" id="y-bp">
+                    <label class="form-check-label" for="y-bp">BloodPressure</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="y-encoding" value="SkinThickness" id="y-st">
+                    <label class="form-check-label" for="y-st">SkinThickness</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="y-encoding" value="Insulin" id="y-in">
+                    <label class="form-check-label" for="y-in">Insulin</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="y-encoding" value="BMI" id="y-bm">
+                    <label class="form-check-label" for="y-bm">BMI</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="y-encoding" value="DiabetesPedigreeFunction" id="y-dp">
+                    <label class="form-check-label" for="y-dp">DiabetesPedigreeFunction</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="y-encoding" value="Age" id="y-ag">
+                    <label class="form-check-label" for="y-ag">Age</label>
                 </div>
             </div>
         </div>
@@ -100,20 +132,21 @@
             </div>
         </div>
         <div class="text-center">
-            <svg width="400" height="400" id="scatterplot">
-            </svg>
-
-            <svg width="400" height="400" id="histogram">
-            </svg>
+            <svg width="400" height="400" id="scatterplot"></svg>
+            <svg width="400" height="400" id="histogram"></svg>
         </div>
         <table class="table table-striped text-center">
             <thead>
                 <tr>
-                    <th>Petal Length</th>
-                    <th>Petal Width</th>
-                    <th>Sepal Length</th>
-                    <th>Sepal Width</th>
-                    <th>Variety</th>
+                    <th>Pregnancies</th>
+                    <th>Glucose</th>
+                    <th>BloodPressure</th>
+                    <th>SkinThickness</th>
+                    <th>Insulin</th>
+                    <th>BMI</th>
+                    <th>DiabetesPedigreeFunction</th>
+                    <th>Age</th>
+                    <th>Outcome</th>
                 </tr>
             </thead>
             <tbody id="data-table">
@@ -130,7 +163,7 @@
             let xVar = d3.select("input[type=radio][name=x-encoding]:checked").property("value");
             let yVar = d3.select("input[type=radio][name=y-encoding]:checked").property("value");
             let useColor = d3.select("#use-color").property("checked");
-            let colorVar = ["Setosa", "Versicolor", "Virginica "];
+            let colorVar = ["0", "1"];
             
             // TODO: update the scatterplot by calling scatterplot.update
             scatterplot.update(xVar, yVar, useColor, colorVar);
@@ -144,13 +177,19 @@
             dataTable.update(brushedData && brushedData.length > 0 ? brushedData : data, data.columns)
         }
 
-        d3.csv("https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv")
+        d3.csv("https://raw.githubusercontent.com/obeychoi0120/InfoVis/main/diabetes.csv")
+        // d3.csv("https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv")
             .then(csvData => {
                 csvData.forEach(d => {
-                    d["petal.length"] = +d["petal.length"];
-                    d["petal.width"] = +d["petal.width"];
-                    d["sepal.length"] = +d["sepal.length"];
-                    d["sepal.width"] = +d["sepal.width"];
+                    d["Pregnancies"] = +d["Pregnancies"];
+                    d["Glucose"] = +d["Glucose"];
+                    d["BloodPressure"] = +d["BloodPressure"];
+                    d["SkinThickness"] = +d["SkinThickness"];
+                    d["Insulin"] = +d["Insulin"];
+                    d["BMI"] = +d["BMI"];
+                    d["DiabetesPedigreeFunction"] = +d["DiabetesPedigreeFunction"];
+                    d["Age"] = +d["Age"];
+                    d["Outcome"] = +d["Outcome"]
                 });
 
                 data = csvData;

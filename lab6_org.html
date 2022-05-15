@@ -7,19 +7,31 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+    <script src="components/scatterplot.js"></script>
+    <script src="components/histogram.js"></script>
+    <script src="components/datatable.js"></script>
 
 
     <title>My Scatterplot</title>
     <style>
         body {
             background: #eee;
+            overflow-y: scroll;
         }
 
         .container {
-            width: 640px;
+            width: 800px;
             background: white;
+        }
+
+        /* In the <style> tag in index.html */
+        .brushed {
+            stroke-width: 1;
+            stroke: gray;
+            r: 5;
         }
     </style>
 </head>
@@ -34,7 +46,7 @@
 
     </header>
 
-    <main class="container">
+    <main class="container pb-3">
         <div class="row pt-2">
             <div class="col-1 text-end pe-2"><strong>X:</strong></div>
             <div class="col-11">
@@ -82,124 +94,90 @@
         <div class="row">
             <div class="col offset-1">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="use-color">
+                    <input class="form-check-input" type="checkbox" role="switch" id="use-color" checked>
                     <label class="form-check-label" for="use-color">Color-encode Class</label>
                 </div>
             </div>
         </div>
-        <div class="text-end">
-            <button class="btn btn-primary" id="update">Update</button>
-            <button class="btn btn-secondary" id="reset">Reset</button>
-        </div>
         <div class="text-center">
-            <svg width="400" height="400" id="svg">
+            <svg width="400" height="400" id="scatterplot">
+            </svg>
+
+            <svg width="400" height="400" id="histogram">
             </svg>
         </div>
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th>Petal Length</th>
+                    <th>Petal Width</th>
+                    <th>Sepal Length</th>
+                    <th>Sepal Width</th>
+                    <th>Variety</th>
+                </tr>
+            </thead>
+            <tbody id="data-table">
+
+            </tbody>
+        </table>
     </main>
 
     <script>
-        let svg; // the main container, <svg>
-        let container; // <g> for circles
-        let xAxis; // <g> for the x axis
-        let yAxis; // <g> for the y axis
-        let legend; // <g> for the legend
+        let data, brushedData, scatterplot, histogram, dataTable;
 
-        let width = 500, height = 400;
-        let margin = { top: 10, right: 10, bottom: 40, left: 40 };
-        let data; // loaded data
-        let xScale, yScale, zScale;
-
-        function initialize() {
-            svg = d3.select("#svg");
-            container = svg.append("g");
-            xAxis = svg.append("g");
-            yAxis = svg.append("g");
-            legend = svg.append("g");
-
-            xScale = d3.scaleLinear();
-            yScale = d3.scaleLinear();
-            zScale = d3.scaleOrdinal().domain(["Setosa", "Versicolor", "Virginica"]).range(d3.schemeCategory10)
-            // attr을 이런식으로 찍는구만
-            svg
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom);
-
-            container.attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-            // TODO: call update when the update button (#update) is clicked
-            d3.select("#update").on("click", update);
-
-            // TODO: call reset when the reset button (#reset) is clicked
-            d3.select("#reset").on("click", reset);  
-        }
-        
-        function update() {
-            // TODO: read the value property of the selected radio button            
+        function updateScatterplot() {
+            
             let xVar = d3.select("input[type=radio][name=x-encoding]:checked").property("value");
-
-            // TODO: read the value property of the selected radio button
             let yVar = d3.select("input[type=radio][name=y-encoding]:checked").property("value");
-
-            // TODO: read whether the #use-color checkbox has been checked or not (boolean)
             let useColor = d3.select("#use-color").property("checked");
-
-            xScale = d3.scaleLinear().domain(d3.extent(data, d => d[xVar])).range([0, width]);
-            yScale = d3.scaleLinear().domain(d3.extent(data, d => d[yVar])).range([height, 0]);
-
-            container.selectAll("circle")
-                .data(data)
-                .join("circle")
-                .transition()
-                .attr("cx", d => xScale(d[xVar]))
-                .attr("cy", d => yScale(d[yVar]))
-                // TODO: if useColor is true, call zScale. Otherwise, always return black
-                // Hint: you can use the ternary operator (a ? b : c)
-                
-                .attr("fill", d => useColor ? zScale(d.variety) : "black")
-                .attr("r", 3)
-
-            xAxis
-                .attr("transform", `translate(${margin.left}, ${margin.top + height})`)
-                .transition()
-                .call(d3.axisBottom(xScale));
-
-            yAxis
-                .attr("transform", `translate(${margin.left}, ${margin.top})`)
-                .transition()
-                .call(d3.axisLeft(yScale));
-
-            // TODO: if use color is true, draw and show the color legend
-            // TODO: otherwise, hide the legend.
-            legend
-                .attr("transform", `translate(${margin.left+400}, ${margin.top})`)
-
-                .call(d3.legendColor().scale(zScale)) // zScale 적용
-                .style("opacity", useColor ? 100 : 0) // usecolor==True일경우 opacity 100, 아니면 투명
+            let colorVar = ["Setosa", "Versicolor", "Virginica"];
+            
+            // TODO: update the scatterplot by calling scatterplot.update
+            scatterplot.update(xVar, yVar, useColor, colorVar);
         }
 
-        // 이 함수를 function에 할당하기
-        function reset() {
-            d3.select("input[type=radio][name=x-encoding][value='sepal.length']").property("checked", true);
-            d3.select("input[type=radio][name=y-encoding][value='sepal.width']").property("checked", true);
+        function updateHistogram() {
+            histogram.update(brushedData && brushedData.length > 0 ? brushedData : data, "variety");
+        }
 
-            update();
+        function updateDataTable() {
+            dataTable.update(brushedData && brushedData.length > 0 ? brushedData : data, data.columns)
         }
 
         d3.csv("https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv")
             .then(csvData => {
-            csvData.forEach(d => {
-            d["Pregnancies"] = +d["Pregnancies"];
-            d["Glucose"] = +d["Glucose"];
-            d["BloodPressure"] = +d["BloodPressure"];
-            d["SkinThickness"] = +d["SkinThickness"];
-            d["Insulin"] = +d["Insulin"];
-            d["BMI"] = +d["BMI"];
-            d["DiabetesPedigreeFunction"] = +d["DiabetesPedigreeFunction"];
-            d["Age"] = +d["Age"];
-            });
+                csvData.forEach(d => {
+                    d["petal.length"] = +d["petal.length"];
+                    d["petal.width"] = +d["petal.width"];
+                    d["sepal.length"] = +d["sepal.length"];
+                    d["sepal.width"] = +d["sepal.width"];
+                });
+
                 data = csvData;
-                initialize();
-                update();
+
+                scatterplot = new Scatterplot("#scatterplot", data);
+                scatterplot.initialize();
+
+                updateScatterplot();
+                d3.selectAll("input[type=radio][name=x-encoding]").on("change", updateScatterplot);
+                d3.selectAll("input[type=radio][name=y-encoding]").on("change", updateScatterplot);
+                d3.selectAll("#use-color").on("change", updateScatterplot);
+
+                // TODO: bind an event handler to "brush" events                
+                scatterplot.on("brush", (brushedItems) => {
+                    brushedData = brushedItems;
+                    updateHistogram();
+                    updateDataTable();
+                })
+
+                histogram = new Histogram("#histogram");
+                histogram.initialize();
+
+                updateHistogram();
+
+                dataTable = new DataTable("#data-table");
+
+                updateDataTable();
             })
     </script>
 

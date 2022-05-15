@@ -18,7 +18,7 @@ class Histogram {
 
         this.xScale = d3.scaleBand();
         this.yScale = d3.scaleLinear();
-
+        this.zScale = d3.scaleOrdinal().domain(["normal", 'diabetes']).range(d3.schemeCategory10) //추가 
         this.svg
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.top + this.margin.bottom);

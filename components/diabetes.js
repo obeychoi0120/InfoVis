@@ -1,4 +1,4 @@
-d3.csv("prices.csv").get(function(error, data){
+d3.csv("diabetes.csv").get(function(error, data){
     console.log(data);
 }
 )
