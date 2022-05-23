@@ -1,6 +1,6 @@
 class PC {
     margin = {
-        top: 50, right: 50, bottom: 10, left: 50
+        top: 40, right: 40, bottom: 40, left: 40
     }
 
     constructor(svg, data, dimensions, width = 1000, height = 250) {
@@ -25,14 +25,14 @@ class PC {
                 .range([this.height, 0])
         });
 
-        this.axes = this.container.append("g");
         this.titles = this.container.append("g");
         this.lines = this.container.append("g");
         this.focusedLines = this.container.append("g");
-
+        this.axes = this.container.append("g");
         // this.zScale = d3.scaleOrdinal().range(d3.schemeSet2)
-        this.zScale = d3.scaleOrdinal().range(d3.schemePastel1)
-        // this.zScale = d3.scaleOrdinal().range(d3.schemeAccent)
+        this.zScale = d3.scaleOrdinal().range(d3.schemePastel1);
+        // this.zScale = d3.scaleOrdinal().range(d3.schemeCategory10)
+        // this.zScale = d3.scaleOrdinal().range(d3.schemeTableau10);
 
         this.svg
             .attr("width", this.width + this.margin.left + this.margin.right)

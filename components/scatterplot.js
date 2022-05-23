@@ -1,9 +1,9 @@
 class Scatterplot {
     margin = {
-        top: 10, right: 100, bottom: 40, left: 40
+        top: 40, right: 50, bottom: 40, left: 50
     }
 
-    constructor(svg, tooltip, data, width = 480, height = 480) {
+    constructor(svg, tooltip, data, width = 400, height = 400) {
         this.svg = svg;
         this.tooltip = tooltip;
         this.data = data;
@@ -24,7 +24,9 @@ class Scatterplot {
         this.xScale = d3.scaleLinear();
         this.yScale = d3.scaleLinear();
         // this.zScale = d3.scaleOrdinal().range(d3.schemeCategory10)
-        this.zScale = d3.scaleOrdinal().range(d3.schemePastel1)
+        // this.zScale = d3.scaleOrdinal().range(d3.schemeTableau10);
+
+        this.zScale = d3.scaleOrdinal().range(d3.schemePastel1);
         // this.zScale = d3.scaleOrdinal().range(d3.schemeSet2)
         this.svg
             .attr("width", this.width + this.margin.left + this.margin.right)
@@ -47,7 +49,6 @@ class Scatterplot {
         this.xScale.domain(d3.extent(this.data, d => d[xVar])).range([0, this.width]);
         this.yScale.domain(d3.extent(this.data, d => d[yVar])).range([this.height, 0]);
         this.zScale.domain([...new Set(this.data.map(d => d[colorVar]))])
-
         this.container.call(this.brush);
         
         this.circles = this.container.selectAll("circle")
@@ -91,12 +92,18 @@ class Scatterplot {
             .transition()
             .call(d3.axisLeft(this.yScale));
 
+        let labelDict = {
+            0 : "Normal",
+            1 : "Diabetes"
+        }
+
         if (useColor) {
             this.legend
                 .style("display", "inline")
-                .style("font-size", ".8em")
+                .style("font-size", ".9em")
                 .attr("transform", `translate(${this.width + this.margin.left + 10}, ${this.height / 2})`)
-                // .call(d3.legendColor().scale(this.zScale))
+                .call(d3.legendColor().scale(this.zScale))
+
         }
         else {
             this.legend.style("display", "none");
