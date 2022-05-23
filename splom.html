@@ -83,6 +83,10 @@
                     <input class="form-check-input" type="radio" name="x-encoding" value="Age" id="x-ag">
                     <label class="form-check-label" for="x-ag">Age</label>
                 </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="x-encoding" value="Outcome" id="x-out">
+                    <label class="form-check-label" for="x-out">Outcome</label>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -121,6 +125,10 @@
                     <input class="form-check-input" type="radio" name="y-encoding" value="Age" id="y-ag">
                     <label class="form-check-label" for="y-ag">Age</label>
                 </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="y-encoding" value="Outcome" id="y-out">
+                    <label class="form-check-label" for="y-out">Outcome</label>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -155,7 +163,12 @@
         </table>
     </main>
 
-    <script>
+    <script type="module">
+        import {ScatterplotMatrix} from "@d3/splom"
+        import {Swatches} from "@d3/color-legend"
+        import {howto, altplot} from "@d3/example-components"
+
+        
         let data, brushedData, scatterplot, histogram, dataTable;
 
         function updateScatterplot() {
@@ -163,14 +176,14 @@
             let xVar = d3.select("input[type=radio][name=x-encoding]:checked").property("value");
             let yVar = d3.select("input[type=radio][name=y-encoding]:checked").property("value");
             let useColor = d3.select("#use-color").property("checked");
-            let colorVar = ["0", "1"];
+            // let colorVar = ["normal", "diabetes"];
             
             // TODO: update the scatterplot by calling scatterplot.update
-            scatterplot.update(xVar, yVar, useColor, colorVar);
+            scatterplot.update(xVar, yVar, "Outcome", useColor);
         }
 
         function updateHistogram() {
-            histogram.update(brushedData && brushedData.length > 0 ? brushedData : data, "variety");
+            histogram.update(brushedData && brushedData.length > 0 ? brushedData : data, "Outcome");
         }
 
         function updateDataTable() {
@@ -178,7 +191,6 @@
         }
 
         d3.csv("https://raw.githubusercontent.com/obeychoi0120/InfoVis/main/diabetes.csv")
-        // d3.csv("https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv")
             .then(csvData => {
                 csvData.forEach(d => {
                     d["Pregnancies"] = +d["Pregnancies"];
@@ -193,7 +205,7 @@
                 });
 
                 data = csvData;
-
+                
                 scatterplot = new Scatterplot("#scatterplot", data);
                 scatterplot.initialize();
 
@@ -213,6 +225,7 @@
                 histogram.initialize();
 
                 updateHistogram();
+
 
                 dataTable = new DataTable("#data-table");
 

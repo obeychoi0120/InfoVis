@@ -3,8 +3,9 @@ class Scatterplot {
         top: 10, right: 100, bottom: 40, left: 40
     }
 
-    constructor(svg, data, width = 400, height = 400) {
+    constructor(svg, tooltip, data, width = 480, height = 480) {
         this.svg = svg;
+        this.tooltip = tooltip;
         this.data = data;
         this.width = width;
         this.height = height;
@@ -18,11 +19,13 @@ class Scatterplot {
         this.xAxis = this.svg.append("g");
         this.yAxis = this.svg.append("g");
         this.legend = this.svg.append("g");
+        this.tooltip = d3.select(this.tooltip);
 
         this.xScale = d3.scaleLinear();
         this.yScale = d3.scaleLinear();
-        this.zScale = d3.scaleOrdinal().range(d3.schemeCategory10)
-
+        // this.zScale = d3.scaleOrdinal().range(d3.schemeCategory10)
+        this.zScale = d3.scaleOrdinal().range(d3.schemePastel1)
+        // this.zScale = d3.scaleOrdinal().range(d3.schemeSet2)
         this.svg
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.top + this.margin.bottom);
@@ -37,7 +40,7 @@ class Scatterplot {
             })
     }
 
-    update(xVar, yVar, useColor, colorVar) {
+    update(xVar, yVar, colorVar, useColor) {
         this.xVar = xVar;
         this.yVar = yVar;
 
@@ -45,19 +48,38 @@ class Scatterplot {
         this.yScale.domain(d3.extent(this.data, d => d[yVar])).range([this.height, 0]);
         this.zScale.domain([...new Set(this.data.map(d => d[colorVar]))])
 
+        this.container.call(this.brush);
+        
         this.circles = this.container.selectAll("circle")
             .data(data)
-            .join("circle");
+            .join("circle")
+            .on("mouseover", (e, d) => {
+                this.tooltip.style("display", "block");
+                this.tooltip.select(".tooltip-inner")
+                    .html(`${this.xVar}: ${d[this.xVar]}<br />${this.yVar}: ${d[this.yVar]}`);
+
+                Popper.createPopper(e.target, this.tooltip.node(), {
+                    placement: 'top',
+                    modifiers: [
+                        {
+                            name: 'arrow',
+                            options: {
+                                element: this.tooltip.select(".tooltip-arrow").node(),
+                            },
+                        },
+                    ],
+                });
+            })
+            .on("mouseout", (d) => {
+                this.tooltip.style("display", "none");
+            });
 
         this.circles
             .transition()
             .attr("cx", d => this.xScale(d[xVar]))
             .attr("cy", d => this.yScale(d[yVar]))
-            .attr("fill", useColor ? d => this.zScale(d["variety"]) : "black")
-            .attr("r", 3)
-
-
-        this.container.call(this.brush);
+            .attr("fill", useColor ? d => this.zScale(d[colorVar]) : "black")
+            .attr("r", 3.5)
 
         this.xAxis
             .attr("transform", `translate(${this.margin.left}, ${this.margin.top + this.height})`)
@@ -74,7 +96,7 @@ class Scatterplot {
                 .style("display", "inline")
                 .style("font-size", ".8em")
                 .attr("transform", `translate(${this.width + this.margin.left + 10}, ${this.height / 2})`)
-                .call(d3.legendColor().scale(this.zScale))
+                // .call(d3.legendColor().scale(this.zScale))
         }
         else {
             this.legend.style("display", "none");

@@ -1,6 +1,6 @@
 class Histogram {
     margin = {
-        top: 10, right: 10, bottom: 40, left: 40
+        top: 20, right: 10, bottom: 40, left: 40
     }
 
     constructor(svg, width = 250, height = 250) {
@@ -18,7 +18,6 @@ class Histogram {
 
         this.xScale = d3.scaleBand();
         this.yScale = d3.scaleLinear();
-        this.zScale = d3.scaleOrdinal().domain(["normal", 'diabetes']).range(d3.schemeCategory10) //추가 
         this.svg
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.top + this.margin.bottom);
@@ -29,7 +28,6 @@ class Histogram {
     update(data, xVar) {
         const categories = [...new Set(data.map(d => d[xVar]))]
         const counts = {}
-
         categories.forEach(c => {
             counts[c] = data.filter(d => d[xVar] === c).length;
         })
@@ -45,7 +43,7 @@ class Histogram {
             .attr("y", d => this.yScale(counts[d]))
             .attr("width", this.xScale.bandwidth())
             .attr("height", d => this.height - this.yScale(counts[d]))
-            .attr("fill", "yellow")
+            .attr("fill", "lightgray");
 
 
         this.xAxis
