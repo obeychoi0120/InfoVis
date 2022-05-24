@@ -25,7 +25,6 @@ class Scatterplot {
         this.yScale = d3.scaleLinear();
         // this.zScale = d3.scaleOrdinal().range(d3.schemeCategory10)
         // this.zScale = d3.scaleOrdinal().range(d3.schemeTableau10);
-
         this.zScale = d3.scaleOrdinal().range(d3.schemePastel1);
         // this.zScale = d3.scaleOrdinal().range(d3.schemeSet2)
         this.svg
@@ -81,21 +80,22 @@ class Scatterplot {
             .attr("cy", d => this.yScale(d[yVar]))
             .attr("fill", useColor ? d => this.zScale(d[colorVar]) : "black")
             .attr("r", 3.5)
+            .style("opacity", 1.0)
 
         this.xAxis
             .attr("transform", `translate(${this.margin.left}, ${this.margin.top + this.height})`)
             .transition()
+            .attr("class", "x axis")
+            // .text("Hello")
             .call(d3.axisBottom(this.xScale));
+            // 
 
         this.yAxis
             .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`)
             .transition()
+            .attr("class", "y axis")
+            // .text("Hello")
             .call(d3.axisLeft(this.yScale));
-
-        let labelDict = {
-            0 : "Normal",
-            1 : "Diabetes"
-        }
 
         if (useColor) {
             this.legend
@@ -103,7 +103,6 @@ class Scatterplot {
                 .style("font-size", ".9em")
                 .attr("transform", `translate(${this.width + this.margin.left + 10}, ${this.height / 2})`)
                 .call(d3.legendColor().scale(this.zScale))
-
         }
         else {
             this.legend.style("display", "none");
@@ -127,6 +126,7 @@ class Scatterplot {
 
         if (this.handlers.brush)
             this.handlers.brush(this.data.filter(d => this.isBrushed(d, selection)));
+            this.circles.style("opacity", 1.0)
     }
 
     on(eventType, handler) {

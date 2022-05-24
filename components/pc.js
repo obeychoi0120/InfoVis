@@ -65,7 +65,7 @@ class PC {
             .attr("d", polyline)
             .style("fill", "none")
             .style("stroke", d => this.zScale(d[colorVar]))
-            .style("opacity", 0.0)
+            .style("opacity", 0.05)
 
         this.focusedLines
             .selectAll("path")
